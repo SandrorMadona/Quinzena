@@ -33,5 +33,3 @@ O sistema permite que o usuário registre rotas realizadas em determinados dias,
 - **Menu interativo**: com tratamento de entradas inválidas via `try/catch`.  
 
 ---
-
-## 📂 Estrutura do Projeto

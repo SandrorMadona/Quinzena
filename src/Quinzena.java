@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,7 @@ public class Quinzena {
 
     // Lista que guarda todas as rotas da quinzena
     private List<RotaDia> rotasQuinzena = new ArrayList<>();
+    private List<CustosVariaveis> custosVariaveis = new ArrayList<>();
 
     // Metodo para adicionar uma rota com interação via console
     public void addRota() {

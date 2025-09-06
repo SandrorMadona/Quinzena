@@ -1,9 +1,13 @@
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CustosFixos {
     private BigDecimal financiamento;
     private BigDecimal trocaDeOleo;
+
+
 
     public void adicionarValor(){
         Scanner scanner = new Scanner(System.in);

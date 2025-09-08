@@ -1,39 +1,62 @@
+import java.math.BigDecimal;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
-    // Cria um RotaDia dizendo que no dia 3 de setembro de 2025 você fez a rota AM
-    public void inicializarMenu(){
-    Quinzena quinzenaatual = new Quinzena();
-    int sair = 0;
-    Scanner scanner = new Scanner(System.in);
+
+    public void inicializarMenu() {
+        Quinzena quinzenaatual = new Quinzena();
+        int sair = 0;
+        Scanner scanner = new Scanner(System.in);
 
         while (sair == 0) {
             System.out.println("--------------------------------------------------------------\n" +
                     "O que deseja fazer:\n" +
-                    "Adicionar rota: 1\n" +
-                    "Listar rotas: 2\n" +
-                    "Valor total quinzena: 3\n" +
-                    "sair = 4");
+                    "1 - Adicionar rota\n" +
+                    "2 - Listar rotas\n" +
+                    "3 - Valor total quinzena\n" +
+                    "4 - Adicionar custo variável\n" +
+                    "5 - Valor total custos variáveis\n" +
+                    "6 - Adicionar custos fixos\n" +
+                    "7 - Valor total custos fixos\n" +
+                    "8 - Calcular lucro da quinzena\n" +
+                    "9 - Sair");
+
             try {
                 int escolha = scanner.nextInt();
-                if (escolha == 1) {
-                    quinzenaatual.addRota();
-                } else if (escolha == 2) {
-                    quinzenaatual.listarRotas();
-                } else if (escolha == 3) {
-                    int total = quinzenaatual.calcularTotalQuinzena();
-                    System.out.println("total da Quinzena: " + total);
-                } else if (escolha == 4) {
-                    System.out.println("Programa Encerrado");
-                    scanner.close();
-                    sair = 1;
-                }else{
-                    System.out.println("Digite um numero do Menu"); //aqui nao preciso colocar o scanner.nextLine(); porque nao vai gerar erro vai apenas continuar no loop entao posso apenas informar ao usuario o erro dele
+
+                switch (escolha) {
+                    case 1 -> quinzenaatual.addRota();
+                    case 2 -> quinzenaatual.listarRotas();
+                    case 3 -> {
+                        BigDecimal total = quinzenaatual.calcularTotalQuinzena();
+                        System.out.println("Total da Quinzena: R$ " + total);
+                    }
+                    case 4 -> quinzenaatual.addCustoVariavel();
+                    case 5 -> {
+                        BigDecimal totalVar = quinzenaatual.calcularTotalCustosVariaveis();
+                        System.out.println("Total custos variáveis: R$ " + totalVar);
+                    }
+                    case 6 -> quinzenaatual.addCustosFixos();
+                    case 7 -> {
+                        BigDecimal totalFixos = quinzenaatual.calcularCustosFixos();
+                        System.out.println("Total custos fixos: R$ " + totalFixos);
+                    }
+                    case 8 -> {
+                        BigDecimal lucro = quinzenaatual.calcularLucro();
+                        System.out.println("Lucro da quinzena: R$ " + lucro);
+                    }
+                    case 9 -> {
+                        System.out.println("Programa Encerrado");
+                        scanner.close();
+                        sair = 1;
+                    }
+                    default -> System.out.println("Digite um número válido do Menu");
                 }
-            }catch(InputMismatchException e){
-                scanner.nextLine(); // para limpar o scanner e nao gerar recursao, pois chamar o Menu(); toda vez que errar pode gerar stackOverFlow0
-                System.out.println("Digite apenas os numeros escolhidos");
+
+            } catch (InputMismatchException e) {
+                scanner.nextLine(); // limpa entrada inválida
+                System.out.println("Digite apenas os números escolhidos");
             }
         }
     }

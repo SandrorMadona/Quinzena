@@ -2,17 +2,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Quinzena {
 
-    // Lista que guarda todas as rotas da quinzena
     private List<RotaDia> rotasQuinzena = new ArrayList<>();
     private List<CustosVariaveis> custosVariaveis = new ArrayList<>();
+    private CustosFixos custosFixos; // apenas um conjunto de custos fixos
 
-    // Metodo para adicionar uma rota com interação via console
+    // --- Rotas ---
     public void addRota() {
-        Scanner scanner = new Scanner(System.in);
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
 
         System.out.println("Digite o dia da rota: ");
         int dia = scanner.nextInt();
@@ -24,10 +23,8 @@ public class Quinzena {
         System.out.println("Digite o numero conforme a rota: AM = 1 \n AM2 = 2 \n SD = 3");
         int rotaHorario = scanner.nextInt();
 
-        // Cria a data apenas uma vez
         LocalDate data = LocalDate.of(ano, mes, dia);
 
-        // Escolhe a rota de acordo com o número
         Rota rotaEscolhida = null;
         if (rotaHorario == 1) {
             rotaEscolhida = Rota.AM;
@@ -37,38 +34,62 @@ public class Quinzena {
             rotaEscolhida = Rota.SD;
         } else {
             System.out.println("Numero de rota invalido!");
-            return; // sai do metodo se for inválido
+            return;
         }
 
-        // Cria o RotaDia e adiciona na lista
         RotaDia novaRota = new RotaDia(data, rotaEscolhida);
         rotasQuinzena.add(novaRota);
 
         System.out.println("Rota adicionada com sucesso!");
     }
 
-    // Metodo para listar todas as rotas registradas na quinzena
     public void listarRotas() {
-        System.out.println("Rotas registradas na quinzena:");
+        System.out.println("Rotas registradas:");
         for (RotaDia rd : rotasQuinzena) {
             System.out.println("Data: " + rd.getData() + " - Rota: " + rd.getRota() + " - Valor: R$" + rd.getRota().getValor());
         }
     }
 
-    public int calcularTotalQuinzena() {
-        int total = 0; // inicializa a soma
-
-        // percorre cada RotaDia na lista
+    public BigDecimal calcularTotalQuinzena() {
+        BigDecimal total = BigDecimal.ZERO;
         for (RotaDia rotaPercorrida : rotasQuinzena) {
-            total += rotaPercorrida.getRota().getValor(); // pega o valor da rota e soma
+            total = total.add(BigDecimal.valueOf(rotaPercorrida.getRota().getValor()));
         }
-
-        return total; // retorna o total acumulado
+        return total;
     }
 
-    // Getter para acessar a lista de rotas (caso precise fora da classe)
-    public List<RotaDia> getRotasQuinzena() {
-        return rotasQuinzena;
+    // --- Custos variáveis ---
+    public void addCustoVariavel() {
+        CustosVariaveis cv = CustosVariaveis.criarViaScanner();
+        custosVariaveis.add(cv);
+        System.out.println("Gasto adicionado: " + cv);
     }
 
+    public BigDecimal calcularTotalCustosVariaveis() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (CustosVariaveis cv : custosVariaveis) {
+            total = total.add(cv.getValor());
+        }
+        return total;
+    }
+
+    // --- Custos fixos ---
+    public void addCustosFixos() {
+        custosFixos = new CustosFixos();
+        custosFixos.adicionarValor();
+    }
+
+    public BigDecimal calcularCustosFixos() {
+        if (custosFixos == null) {
+            return BigDecimal.ZERO;
+        }
+        return custosFixos.calcularCustoFixo();
+    }
+
+    // --- Lucro final ---
+    public BigDecimal calcularLucro() {
+        return calcularTotalQuinzena()
+                .subtract(calcularTotalCustosVariaveis())
+                .subtract(calcularCustosFixos());
+    }
 }
